@@ -1,0 +1,25 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+
+}
+
+model Category {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  notes Note[]
+}
+
+model Note {
+  id         Int      @id @default(autoincrement())
+  title      String
+  content    String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId Int
+}
