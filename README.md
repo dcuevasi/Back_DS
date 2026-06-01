@@ -350,6 +350,14 @@ Despues de modificar `schema.prisma`, regenerar el cliente:
 npx prisma generate
 ```
 
+## Uso de IA
+
+Se utilizo DeepSeek (OpenCode) como asistente de desarrollo. La IA contribuyo en:
+
+- Definir la estructura de los puntos clave a implementar para cumplir la rubrica
+- Sugerir workarounds para compatibilidad entre plataformas (web vs nativo)
+- Asistir en la implementacion del codigo de autenticacion, middleware y upload
+
 ## Licencia
 
 Este proyecto es privado.

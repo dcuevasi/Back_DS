@@ -5,6 +5,7 @@ export interface CategoryRepository {
   findAll(): Promise<Category[]>;
   findById(id: number): Promise<Category | null>;
   create(data: { name: string }): Promise<Category>;
+  update(id: number, data: { name: string }): Promise<Category>;
   remove(id: number): Promise<void>;
 }
 
@@ -19,6 +20,10 @@ export const categoryRepository: CategoryRepository = {
 
   create(data) {
     return prisma.category.create({ data });
+  },
+
+  update(id, data) {
+    return prisma.category.update({ where: { id }, data });
   },
 
   remove(id) {

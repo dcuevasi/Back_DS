@@ -8,6 +8,14 @@ datasource db {
 
 }
 
+model User {
+  id           Int      @id @default(autoincrement())
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+  notes        Note[]
+}
+
 model Category {
   id    Int    @id @default(autoincrement())
   name  String @unique
@@ -18,8 +26,13 @@ model Note {
   id         Int      @id @default(autoincrement())
   title      String
   content    String
+  imageUrl   String?
+  latitude   Float?
+  longitude  Float?
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
   category   Category @relation(fields: [categoryId], references: [id])
   categoryId Int
+  user       User     @relation(fields: [userId], references: [id])
+  userId     Int
 }

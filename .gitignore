@@ -5,3 +5,4 @@ prisma/migrations/
 *.log
 .env
 .env.local
+uploads/
