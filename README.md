@@ -2,6 +2,8 @@
 
 API REST para gestion de notas personales por categoria. Construida con Hono, Prisma ORM, PostgreSQL y TypeScript.
 
+**URL de produccion:** https://back-ds-m64j.onrender.com
+
 ## Descripcion
 
 Backend del sistema IPSS que expone endpoints REST para que el frontend (React Native / Expo) pueda crear, leer, actualizar y eliminar notas organizadas por categorias.
@@ -86,6 +88,7 @@ npm install
 ```env
 DATABASE_URL=postgresql://usuario:password@localhost:5433/notesdb
 PORT=3000
+JWT_SECRET=una_clave_secreta_aleatoria
 ```
 
 3. Ejecutar las migraciones de Prisma para crear las tablas:
@@ -151,7 +154,7 @@ Relacion: `Category 1 -> N Note`. Al eliminar una categoria que tiene notas asoc
 
 ## Endpoints de la API
 
-Base URL: `http://localhost:3000`
+Base URL: `http://localhost:3000` (desarrollo) o `https://back-ds-m64j.onrender.com` (produccion)
 
 ### Raiz
 
@@ -278,9 +281,44 @@ La validacion de payloads usa Zod. Si el body no cumple el esquema, se devuelve 
 - `logger()`: Registra cada request en consola (metodo, path, status, tiempo de respuesta).
 - `dotenv/config`: Carga las variables del archivo `.env` al iniciar.
 
+## Despliegue en Produccion
+
+La API esta desplegada en Render: **https://back-ds-m64j.onrender.com**
+
+### Plataforma
+
+Se eligio Render por su integracion directa con GitHub (deploy automatico al hacer push a `main`), PostgreSQL gestionado, plan gratuito y soporte nativo para Node.js con TypeScript via `tsx`.
+
+### Base de datos
+
+PostgreSQL gestionado en Render. Las migraciones se aplicaron con `npx prisma migrate deploy`.
+
+### Variables de entorno
+
+Configuradas en el dashboard de Render (nunca en el repositorio):
+- `DATABASE_URL` — Internal Database URL de Render PostgreSQL
+- `JWT_SECRET` — Clave secreta para firmar tokens JWT
+- `PORT` — `10000` (puerto por defecto de Render)
+
+### Deploy automatico
+
+El repositorio de GitHub esta conectado a Render. Cada `git push` a `main` dispara un nuevo deploy automaticamente. El comando de build ejecuta `npm install` que corre `prisma generate` automaticamente via el script `postinstall`.
+
+### Nota sobre subida de imagenes
+
+Las imagenes subidas se almacenan en el disco local de Render (`./uploads/`), que es efimero. No hay persistencia de imagenes entre reinicios del servidor. En un entorno de produccion real se migraria a un servicio de almacenamiento externo como Cloudflare R2 o AWS S3.
+
 ## Conectar desde el Frontend
 
 El frontend (Expo / React Native) debe configurar la variable `EXPO_PUBLIC_API_URL` apuntando a este servidor:
+
+### Produccion
+
+```bash
+EXPO_PUBLIC_API_URL=https://back-ds-m64j.onrender.com
+```
+
+### Desarrollo local
 
 ```bash
 EXPO_PUBLIC_API_URL=http://192.168.1.50:3000   # IP local de la maquina donde corre el backend
@@ -357,6 +395,7 @@ Se utilizo DeepSeek (OpenCode) como asistente de desarrollo. La IA contribuyo en
 - Definir la estructura de los puntos clave a implementar para cumplir la rubrica
 - Sugerir workarounds para compatibilidad entre plataformas (web vs nativo)
 - Asistir en la implementacion del codigo de autenticacion, middleware y upload
+- Configurar el despliegue en Render (variables de entorno, scripts de build, migraciones)
 
 ## Licencia
 
