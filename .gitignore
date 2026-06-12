@@ -1,7 +1,6 @@
 node_modules/
 dist/
 src/generated/
-prisma/migrations/
 *.log
 .env
 .env.local
